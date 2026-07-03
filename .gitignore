@@ -141,3 +141,75 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# ---- Flutter/Dart ----
+*.class
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
+
+# IntelliJ
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# VS Code (uncomment if you don't want to share launch/tasks config)
+# .vscode/
+
+# Flutter/Dart/Pub
+**/doc/api/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+
+# Symbolication/obfuscation
+app.*.symbols
+app.*.map.json
+
+# Android
+android/.gradle/
+android/app/debug
+android/app/profile
+android/app/release
+android/local.properties
+**/android/key.properties
+*.jks
+
+# iOS/macOS
+**/ios/Flutter/.last_build_id
+**/ios/Flutter/ephemeral/
+**/ios/Pods/
+**/ios/.symlinks/
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/ServiceDefinitions.json
+**/macos/Flutter/ephemeral/
+**/macos/Pods/
+*.mode1v3
+*.mode2v3
+*.moved-aside
+*.pbxuser
+*.perspectivev3
+**/DerivedData/
+Icon?
+xcuserdata/
+
+# Linux/Windows desktop
+**/linux/flutter/ephemeral/
+**/windows/flutter/ephemeral/
+
+# Generated files
+*.g.dart
+*.freezed.dart
+
+# Misc
+.metadata
