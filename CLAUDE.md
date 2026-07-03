@@ -42,3 +42,15 @@ flutter build web                      # Web build
 ```
 
 There is currently only one test file (`test/widget_test.dart`), and it exercises the default counter app in `lib/main.dart`.
+
+## Target architecture (reference only — not yet implemented)
+
+The user has stated a preferred stack/conventions for when real feature work starts. None of this exists in the codebase yet (no Riverpod/Dio/GoRouter/Freezed in `pubspec.yaml`) — do not assume it's in place, and do not scaffold it preemptively. Treat this as the plan to follow once that work begins:
+
+- Feature-first structure: each feature in `lib/features/<name>/`, with a barrel export via `feature.dart` in the feature root
+- State management: Riverpod with `@riverpod` code generation (`AsyncNotifier` pattern)
+- HTTP: Dio, with interceptors in `lib/core/network/`
+- Navigation: GoRouter, named routes defined in `lib/core/router/`
+- Models: Freezed + JsonSerializable — run `dart run build_runner build --delete-conflicting-outputs` after any model change
+- Conventions: monetary amounts stored as `int` in the smallest unit (e.g. kobo for NGN), never `double`; use `ref.invalidate()` not `ref.refresh()`; no business logic in widgets (goes in notifiers/repositories); one public widget per file, private widgets prefixed with `_`; API calls only through the repository layer, never directly in notifiers
+- Do not add new packages without asking first; do not hand-edit `*.g.dart` or `*.freezed.dart` — regenerate with build_runner instead
