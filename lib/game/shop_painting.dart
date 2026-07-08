@@ -15,6 +15,51 @@ Paint _fill(Color color) => Paint()
   ..color = color
   ..isAntiAlias = false;
 
+/// เส้นทางกล่องมุมขั้นบันได (ใช้กับ UI ในฉากเกม: บับเบิล/แถบต่างๆ)
+Path pixelRectPath(Rect rect, double corner) {
+  final c = corner.clamp(0, rect.shortestSide / 3).toDouble();
+  final u = c / 2;
+  final l = rect.left, t = rect.top, r = rect.right, b = rect.bottom;
+  return Path()
+    ..moveTo(l + c, t)
+    ..lineTo(r - c, t)
+    ..lineTo(r - c, t + u)
+    ..lineTo(r - u, t + u)
+    ..lineTo(r - u, t + c)
+    ..lineTo(r, t + c)
+    ..lineTo(r, b - c)
+    ..lineTo(r - u, b - c)
+    ..lineTo(r - u, b - u)
+    ..lineTo(r - c, b - u)
+    ..lineTo(r - c, b)
+    ..lineTo(l + c, b)
+    ..lineTo(l + c, b - u)
+    ..lineTo(l + u, b - u)
+    ..lineTo(l + u, b - c)
+    ..lineTo(l, b - c)
+    ..lineTo(l, t + c)
+    ..lineTo(l + u, t + c)
+    ..lineTo(l + u, t + u)
+    ..lineTo(l + c, t + u)
+    ..close();
+}
+
+/// กล่อง pixel: กรอบหนา + พื้นข้างใน (มุมขั้นบันได)
+void drawPixelRect(
+  Canvas canvas,
+  Rect rect, {
+  required Color fill,
+  Color border = Palette.espresso,
+  double borderWidth = 2,
+  double corner = 6,
+}) {
+  canvas.drawPath(pixelRectPath(rect, corner), _fill(border));
+  canvas.drawPath(
+    pixelRectPath(rect.deflate(borderWidth), corner),
+    _fill(fill),
+  );
+}
+
 /// วาด sprite ลงกรอบ [dest] แบบรักษาสัดส่วน ยึดขอบล่างกึ่งกลาง (พิกเซลคม)
 void drawSpriteFit(Canvas canvas, Image image, Rect dest) {
   final scale = (dest.width / image.width < dest.height / image.height)

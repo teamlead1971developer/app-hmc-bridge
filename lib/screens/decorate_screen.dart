@@ -8,6 +8,7 @@ import '../models/placed_decor.dart';
 import '../services/balance.dart';
 import '../services/save_service.dart';
 import '../theme/palette.dart';
+import '../widgets/pixel_ui.dart';
 
 /// โหมดแต่งร้าน: เลือกของจากร้านค้า แตะช่องว่างในห้องเพื่อวาง
 /// แตะของที่วางแล้วเพื่อขายคืน — เซฟอัตโนมัติทุกการเปลี่ยนแปลง
@@ -182,8 +183,7 @@ class _DecorateScreenState extends State<DecorateScreen> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
+                child: ClipRect(
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       final size = constraints.biggest;
@@ -267,17 +267,14 @@ class _ShopCard extends StatelessWidget {
       opacity: affordable || active ? 1 : 0.45,
       child: GestureDetector(
         onTap: active ? null : onTap,
-        child: Container(
+        child: PixelPanel(
           width: 96,
           padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: selected ? Palette.butter : Palette.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: selected ? Palette.sageDark : Palette.shadow,
-              width: selected ? 2 : 1,
-            ),
-          ),
+          fill: selected ? Palette.butter : Palette.white,
+          borderColor: selected ? Palette.sageDark : Palette.espresso,
+          borderWidth: selected ? 3 : 2.5,
+          corner: 6,
+          shadow: false,
           child: Column(
             children: [
               SizedBox(

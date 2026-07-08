@@ -147,19 +147,21 @@ class CustomerComponent extends PositionComponent
 
     if (state != CustomerState.seated) return;
 
-    // แถบความอดทนเหนือหัว
+    // แถบความอดทนเหนือหัว (กล่อง pixel)
     final ratio = (patienceLeft / order.patienceSeconds).clamp(0.0, 1.0);
-    final barRect = Rect.fromLTWH(w * 0.1, -h * 0.12, w * 0.8, h * 0.06);
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(barRect, Radius.circular(h * 0.03)),
-      Paint()..color = Palette.white,
-    );
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(
-        Rect.fromLTWH(barRect.left, barRect.top, barRect.width * ratio, barRect.height),
-        Radius.circular(h * 0.03),
+    final barRect = Rect.fromLTWH(w * 0.08, -h * 0.14, w * 0.84, h * 0.08);
+    drawPixelRect(canvas, barRect, fill: Palette.white, corner: 3);
+    final inner = barRect.deflate(2);
+    canvas.drawRect(
+      Rect.fromLTWH(
+        inner.left,
+        inner.top,
+        ((inner.width * ratio) / 3).floorToDouble() * 3,
+        inner.height,
       ),
-      Paint()..color = Color.lerp(Palette.angry, Palette.happy, ratio)!,
+      Paint()
+        ..color = Color.lerp(Palette.angry, Palette.happy, ratio)!
+        ..isAntiAlias = false,
     );
 
     _renderOrderBubble(canvas, w, h);
@@ -194,25 +196,26 @@ class CustomerComponent extends PositionComponent
       width: math.max(w * 1.7, maxLabelW + w * 0.9),
       height: bubbleH,
     );
-    final tail = Path()
-      ..moveTo(w * 0.40, bubble.bottom - 1)
-      ..lineTo(w * 0.50, bubble.bottom + h * 0.09)
-      ..lineTo(w * 0.64, bubble.bottom - 1)
-      ..close();
-    // เงาบับเบิลจางๆ ให้ลอยจากฉาก
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(
-        bubble.translate(0, h * 0.02),
-        Radius.circular(h * 0.12),
-      ),
+    // เงาตกแบบ hard-edge + กล่องบับเบิล pixel + หางขั้นบันได
+    canvas.drawPath(
+      pixelRectPath(bubble.translate(0, 4), h * 0.14),
       Paint()
         ..color = Palette.shadow
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3),
+        ..isAntiAlias = false,
     );
-    canvas.drawPath(tail, Paint()..color = Palette.white);
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(bubble, Radius.circular(h * 0.12)),
-      Paint()..color = Palette.white,
+    drawPixelRect(canvas, bubble, fill: Palette.white, corner: h * 0.14);
+    final tailCx = w * 0.5;
+    canvas.drawRect(
+      Rect.fromLTWH(tailCx - 8, bubble.bottom - 2, 16, 10),
+      Paint()
+        ..color = Palette.espresso
+        ..isAntiAlias = false,
+    );
+    canvas.drawRect(
+      Rect.fromLTWH(tailCx - 6, bubble.bottom - 4, 12, 9),
+      Paint()
+        ..color = Palette.white
+        ..isAntiAlias = false,
     );
 
     for (var i = 0; i < lines.length; i++) {
@@ -223,14 +226,26 @@ class CustomerComponent extends PositionComponent
       canvas.saveLayer(null, Paint()..color = Color.fromRGBO(0, 0, 0, dimmed));
       line.label.paint(canvas, Offset(bubble.left + w * 0.16, top));
 
-      final dotR = lineH * 0.20;
+      // หยดกลิ่นเป็นสี่เหลี่ยม pixel มีขอบ
+      final dotS = lineH * 0.42;
       for (var d = 0; d < line.dots.length; d++) {
         final c = Offset(
-          bubble.right - w * 0.16 - dotR * 2.4 * (line.dots.length - 1 - d),
+          bubble.right - w * 0.16 - dotS * 1.25 * (line.dots.length - 1 - d),
           top + lineH * 0.28,
         );
-        canvas.drawCircle(c, dotR + 1.2, Paint()..color = Palette.shadow);
-        canvas.drawCircle(c, dotR, Paint()..color = line.dots[d]);
+        final box = Rect.fromCenter(center: c, width: dotS, height: dotS);
+        canvas.drawRect(
+          box.inflate(2),
+          Paint()
+            ..color = Palette.espresso
+            ..isAntiAlias = false,
+        );
+        canvas.drawRect(
+          box,
+          Paint()
+            ..color = line.dots[d]
+            ..isAntiAlias = false,
+        );
       }
       if (line.served) {
         canvas.drawLine(

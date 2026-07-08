@@ -6,6 +6,7 @@ import '../services/balance.dart';
 import '../services/quests.dart';
 import '../services/save_service.dart';
 import '../theme/palette.dart';
+import '../widgets/pixel_ui.dart';
 import '../widgets/smooth.dart';
 import 'decorate_screen.dart';
 import 'scentorium_screen.dart';
@@ -241,13 +242,9 @@ class _QuestBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final quests = Quests.generateDaily(DateTime.now(), save.questDay);
-    return Container(
+    return PixelPanel(
       width: 300,
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      decoration: BoxDecoration(
-        color: Palette.white.withValues(alpha: 0.85),
-        borderRadius: BorderRadius.circular(18),
-      ),
       child: Column(
         mainAxisSize: .min,
         crossAxisAlignment: .start,
@@ -291,15 +288,11 @@ class _QuestBar extends StatelessWidget {
                     decoration: claimed ? TextDecoration.lineThrough : null,
                   ),
                 ),
-                const SizedBox(height: 2),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
-                  child: LinearProgressIndicator(
-                    value: (progress / quest.target).clamp(0.0, 1.0),
-                    minHeight: 5,
-                    backgroundColor: Palette.cream,
-                    color: claimed ? Palette.sage : Palette.lilacDeep,
-                  ),
+                const SizedBox(height: 3),
+                PixelProgressBar(
+                  value: (progress / quest.target).clamp(0.0, 1.0),
+                  height: 9,
+                  color: claimed ? Palette.sage : Palette.lilacDeep,
                 ),
               ],
             ),
@@ -341,15 +334,8 @@ class _StatsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return PixelPanel(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-      decoration: BoxDecoration(
-        color: Palette.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(color: Palette.shadow, blurRadius: 10, offset: Offset(0, 4)),
-        ],
-      ),
       child: Row(
         mainAxisSize: .min,
         children: [

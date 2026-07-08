@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/scent_blend.dart';
 import '../theme/palette.dart';
+import '../widgets/pixel_ui.dart';
 import 'shop_painting.dart';
 
 /// แผงผสมน้ำหอม (เด้งขึ้นเมื่อผู้เล่นเดินถึงโต๊ะปรุง):
@@ -127,10 +128,11 @@ class _BlendStationState extends State<BlendStation> {
     return Container(
       decoration: const BoxDecoration(
         color: Palette.counterTop,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-        boxShadow: [
-          BoxShadow(color: Palette.shadow, blurRadius: 12, offset: Offset(0, -4)),
-        ],
+        border: Border(
+          top: BorderSide(color: Palette.espresso, width: 3.5),
+          left: BorderSide(color: Palette.espresso, width: 3.5),
+          right: BorderSide(color: Palette.espresso, width: 3.5),
+        ),
       ),
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
       child: SafeArea(
@@ -221,9 +223,7 @@ class _BlendStationState extends State<BlendStation> {
                     onPressed: _addToTray,
                     style: FilledButton.styleFrom(
                       backgroundColor: Palette.lilacDeep,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
+                      padding: EdgeInsets.zero,
                     ),
                     child: const Text(
                       'ใส่ถาด 🌸',
@@ -248,30 +248,29 @@ class _NoteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Palette.white,
-      borderRadius: BorderRadius.circular(14),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
-        child: Container(
-          width: 86,
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Column(
-            mainAxisSize: .min,
-            children: [
-              _NoteDot(note: note, size: 22),
-              const SizedBox(height: 4),
-              Text(
-                note.label,
-                style: const TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  color: Palette.espresso,
-                ),
+    return GestureDetector(
+      onTap: onTap,
+      child: PixelPanel(
+        fill: Palette.white,
+        borderWidth: 2.5,
+        corner: 6,
+        shadow: false,
+        width: 86,
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          mainAxisSize: .min,
+          children: [
+            _NoteDot(note: note, size: 22),
+            const SizedBox(height: 4),
+            Text(
+              note.label,
+              style: const TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                color: Palette.espresso,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -286,13 +285,13 @@ class _NoteDot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // หยดน้ำหอมทรงเหลี่ยม pixel (ไม่มีวงกลมในสไตล์นี้)
     return Container(
       width: size,
       height: size,
       decoration: BoxDecoration(
         color: note.color,
-        shape: BoxShape.circle,
-        border: Border.all(color: Palette.shadow),
+        border: Border.all(color: Palette.espresso, width: 2),
       ),
     );
   }

@@ -10,6 +10,7 @@ import '../services/balance.dart';
 import '../services/quests.dart';
 import '../services/save_service.dart';
 import '../theme/palette.dart';
+import '../widgets/pixel_ui.dart';
 import '../widgets/smooth.dart';
 import 'summary_screen.dart';
 
@@ -127,24 +128,15 @@ class _ShiftScreenState extends State<ShiftScreen> {
                   ),
                   child: blend == null
                       ? const SizedBox.shrink(key: ValueKey('none'))
-                      : Container(
+                      : PixelPanel(
                           key: ValueKey(blend.id),
                           padding: const EdgeInsets.symmetric(
                             horizontal: 28,
                             vertical: 16,
                           ),
-                          decoration: BoxDecoration(
-                            color: Palette.white,
-                            borderRadius: BorderRadius.circular(24),
-                            border: Border.all(color: Palette.gold, width: 2),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Palette.shadow,
-                                blurRadius: 16,
-                                offset: Offset(0, 6),
-                              ),
-                            ],
-                          ),
+                          borderColor: Palette.gold,
+                          borderWidth: 3.5,
+                          corner: 12,
                           child: Column(
                             mainAxisSize: .min,
                             children: [
@@ -224,14 +216,13 @@ class _ShiftScreenState extends State<ShiftScreen> {
                   child: Container(
                     color: Palette.espresso.withValues(alpha: 0.55),
                     alignment: .center,
-                    child: Container(
+                    child: PixelPanel(
+                      fill: Palette.cream,
+                      borderColor: Palette.lilacDeep,
+                      borderWidth: 3.5,
+                      corner: 12,
                       margin: const EdgeInsets.symmetric(horizontal: 36),
                       padding: const EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                        color: Palette.cream,
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(color: Palette.lilacDeep, width: 2),
-                      ),
                       child: Column(
                         mainAxisSize: .min,
                         children: [
@@ -304,14 +295,11 @@ class _Hud extends StatelessWidget {
           Expanded(
             child: ValueListenableBuilder<double>(
               valueListenable: game.timeLeft,
-              builder: (context, timeLeft, _) => ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: LinearProgressIndicator(
-                  value: timeLeft / Balance.dayLengthSeconds,
-                  minHeight: 10,
-                  backgroundColor: Palette.white,
-                  color: Palette.lilacDeep,
-                ),
+              builder: (context, timeLeft, _) => PixelProgressBar(
+                value: timeLeft / Balance.dayLengthSeconds,
+                height: 14,
+                background: Palette.white,
+                color: Palette.lilacDeep,
               ),
             ),
           ),
@@ -360,13 +348,13 @@ class _WaitingBell extends StatelessWidget {
         curve: Curves.easeOutBack,
         child: GestureDetector(
           onTap: game.goToFrontRoom,
-          child: Container(
+          child: PixelPanel(
+            fill: Palette.butter,
+            borderColor: Palette.gold,
+            borderWidth: 2.5,
+            corner: 6,
+            shadow: false,
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-            decoration: BoxDecoration(
-              color: Palette.butter,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Palette.gold),
-            ),
             child: Text(
               '🔔 $waiting',
               style: const TextStyle(
@@ -406,25 +394,21 @@ class _TrayBadge extends StatelessWidget {
               margin: const EdgeInsets.only(left: 3),
               decoration: BoxDecoration(
                 color: Palette.white,
-                shape: BoxShape.circle,
                 border: Border.all(
-                  color: i < tray.length ? Palette.lilacDeep : Palette.shadow,
-                  width: i < tray.length ? 1.6 : 1,
+                  color: i < tray.length ? Palette.espresso : Palette.shadow,
+                  width: 2,
                 ),
               ),
               child: i < tray.length
                   ? Center(
                       child: Container(
-                        width: 13,
-                        height: 13,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: switch (tray[i]) {
-                            TrayBlend(:final mixed) =>
-                              mixed.isEmpty ? Palette.latte : mixed.last.color,
-                            TrayProduct(:final product) => product.color,
-                          },
-                        ),
+                        width: 12,
+                        height: 12,
+                        color: switch (tray[i]) {
+                          TrayBlend(:final mixed) =>
+                            mixed.isEmpty ? Palette.latte : mixed.last.color,
+                          TrayProduct(:final product) => product.color,
+                        },
                       ),
                     )
                   : null,

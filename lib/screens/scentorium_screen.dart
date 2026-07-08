@@ -5,6 +5,7 @@ import '../models/game_save.dart';
 import '../models/scent_blend.dart';
 import '../services/save_service.dart';
 import '../theme/palette.dart';
+import '../widgets/pixel_ui.dart';
 import '../widgets/smooth.dart';
 
 /// Scentorium — คลังกลิ่นของร้าน: ผนังขวดโชว์กลิ่นที่รู้จัก/ค้นพบ
@@ -194,13 +195,19 @@ class _ScentoriumScreenState extends State<ScentoriumScreen> {
             Expanded(
               child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    begin: .topCenter,
-                    end: .bottomCenter,
-                    colors: [Palette.woodLight, Palette.woodDark],
+                decoration: ShapeDecoration(
+                  color: Palette.woodLight,
+                  shape: const PixelBorder(
+                    side: BorderSide(color: Palette.espresso, width: 3.5),
+                    corner: 12,
                   ),
-                  borderRadius: BorderRadius.circular(20),
+                  shadows: const [
+                    BoxShadow(
+                      color: Palette.shadow,
+                      offset: Offset(0, 5),
+                      blurRadius: 0,
+                    ),
+                  ],
                 ),
                 child: GridView.builder(
                   padding: const EdgeInsets.all(12),
@@ -279,14 +286,19 @@ class _BottleCard extends StatelessWidget {
         onTap: onTap,
         child: Container(
           padding: const EdgeInsets.all(6),
-          decoration: BoxDecoration(
+          decoration: ShapeDecoration(
             color: known
                 ? Palette.white.withValues(alpha: 0.92)
                 : Palette.espresso.withValues(alpha: 0.25),
-            borderRadius: BorderRadius.circular(12),
-            border: blend.secret && known
-                ? Border.all(color: Palette.gold, width: 1.5)
-                : null,
+            shape: PixelBorder(
+              side: blend.secret && known
+                  ? const BorderSide(color: Palette.gold, width: 2.5)
+                  : BorderSide(
+                      color: Palette.espresso.withValues(alpha: 0.5),
+                      width: 2,
+                    ),
+              corner: 6,
+            ),
           ),
           child: Column(
             children: [
@@ -360,17 +372,14 @@ class _NoteShopCard extends StatelessWidget {
       opacity: owned || affordable ? 1 : 0.5,
       child: GestureDetector(
         onTap: owned || !affordable ? null : onBuy,
-        child: Container(
+        child: PixelPanel(
           width: 104,
           margin: const EdgeInsets.symmetric(horizontal: 4),
           padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Palette.white,
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(
-              color: owned ? Palette.sageDark : Palette.shadow,
-            ),
-          ),
+          borderColor: owned ? Palette.sageDark : Palette.espresso,
+          borderWidth: 2.5,
+          corner: 6,
+          shadow: false,
           child: Column(
             mainAxisAlignment: .center,
             children: [
@@ -379,8 +388,7 @@ class _NoteShopCard extends StatelessWidget {
                 height: 24,
                 decoration: BoxDecoration(
                   color: note.color,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Palette.shadow),
+                  border: Border.all(color: Palette.espresso, width: 2),
                 ),
               ),
               const SizedBox(height: 4),

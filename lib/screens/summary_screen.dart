@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../game/shop_game.dart';
 import '../models/game_save.dart';
 import '../theme/palette.dart';
+import '../widgets/pixel_ui.dart';
 import '../widgets/smooth.dart';
 import 'decorate_screen.dart';
 import 'shift_screen.dart';
@@ -34,19 +35,9 @@ class SummaryScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
-                Container(
+                PixelPanel(
                   padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Palette.white,
-                    borderRadius: BorderRadius.circular(24),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Palette.shadow,
-                        blurRadius: 10,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
-                  ),
+                  corner: 12,
                   child: Column(
                     mainAxisSize: .min,
                     children: [

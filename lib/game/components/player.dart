@@ -87,32 +87,37 @@ class PlayerComponent extends PositionComponent
       flipH: _facingLeft,
     );
 
-    // ของบนถาดลอยเหนือหัว
+    // ของบนถาดลอยเหนือหัว (ถาดไม้ + กล่องของทรงเหลี่ยม pixel)
     final tray = game.tray.value;
     if (tray.isEmpty) return;
-    final r = w * 0.14;
-    final startX = w * 0.5 - (tray.length - 1) * r * 1.4;
-    canvas.drawOval(
+    Paint fill(Color c) => Paint()
+      ..color = c
+      ..isAntiAlias = false;
+    final s = w * 0.26;
+    final trayW = s * 1.3 * tray.length + 6;
+    canvas.drawRect(
       Rect.fromCenter(
-        center: Offset(w * 0.5, -h * 0.10),
-        width: r * 2.8 * tray.length,
-        height: r * 1.2,
+        center: Offset(w * 0.5, -h * 0.08),
+        width: trayW,
+        height: 5,
       ),
-      Paint()..color = Palette.woodDark,
+      fill(Palette.woodDark),
     );
+    final startX = w * 0.5 - (tray.length - 1) * s * 0.65;
     for (var i = 0; i < tray.length; i++) {
-      final c = Offset(startX + i * r * 2.8, -h * 0.16);
+      final c = Offset(startX + i * s * 1.3, -h * 0.08 - 3 - s / 2);
       final itemColor = switch (tray[i]) {
         TrayBlend(:final mixed) =>
           mixed.isEmpty ? Palette.latte : mixed.last.color,
         TrayProduct(:final product) => product.color,
       };
-      canvas.drawCircle(c, r, Paint()..color = Palette.white);
-      canvas.drawCircle(c, r * 0.66, Paint()..color = itemColor);
-      canvas.drawCircle(
-        c + Offset(-r * 0.25, -r * 0.25),
-        r * 0.18,
-        Paint()..color = Palette.white.withValues(alpha: 0.8),
+      final box = Rect.fromCenter(center: c, width: s, height: s);
+      canvas.drawRect(box.inflate(2), fill(Palette.espresso));
+      canvas.drawRect(box, fill(Palette.white));
+      canvas.drawRect(box.deflate(s * 0.2), fill(itemColor));
+      canvas.drawRect(
+        Rect.fromLTWH(box.left + 2, box.top + 2, 3, 3),
+        fill(Palette.white.withValues(alpha: 0.9)),
       );
     }
   }

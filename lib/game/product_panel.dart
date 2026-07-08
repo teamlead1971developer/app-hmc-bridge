@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/product.dart';
 import '../theme/palette.dart';
+import '../widgets/pixel_ui.dart';
 import 'shop_painting.dart';
 
 /// แผงชั้นสินค้าสำเร็จ (เด้งขึ้นเมื่อผู้เล่นเดินถึงชั้น): แตะชิ้นที่ต้องการหยิบ
@@ -38,10 +39,11 @@ class _ProductPanelState extends State<ProductPanel> {
     return Container(
       decoration: const BoxDecoration(
         color: Palette.counterTop,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-        boxShadow: [
-          BoxShadow(color: Palette.shadow, blurRadius: 12, offset: Offset(0, -4)),
-        ],
+        border: Border(
+          top: BorderSide(color: Palette.espresso, width: 3.5),
+          left: BorderSide(color: Palette.espresso, width: 3.5),
+          right: BorderSide(color: Palette.espresso, width: 3.5),
+        ),
       ),
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
       child: SafeArea(
@@ -75,37 +77,36 @@ class _ProductPanelState extends State<ProductPanel> {
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: Material(
-                        color: Palette.white,
-                        borderRadius: BorderRadius.circular(16),
-                        child: InkWell(
-                          onTap: () => _take(product),
-                          borderRadius: BorderRadius.circular(16),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Column(
-                              mainAxisSize: .min,
-                              children: [
-                                SizedBox(
-                                  width: 48,
-                                  height: 44,
-                                  child: CustomPaint(
-                                    painter: _ProductPainter(product),
-                                  ),
+                      child: GestureDetector(
+                        onTap: () => _take(product),
+                        child: PixelPanel(
+                          fill: Palette.white,
+                          borderWidth: 2.5,
+                          corner: 6,
+                          shadow: false,
+                          padding: const EdgeInsets.all(8),
+                          child: Column(
+                            mainAxisSize: .min,
+                            children: [
+                              SizedBox(
+                                width: 48,
+                                height: 44,
+                                child: CustomPaint(
+                                  painter: _ProductPainter(product),
                                 ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  product.name,
-                                  maxLines: 1,
-                                  overflow: .ellipsis,
-                                  style: const TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w700,
-                                    color: Palette.espresso,
-                                  ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                product.name,
+                                maxLines: 1,
+                                overflow: .ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w700,
+                                  color: Palette.espresso,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
