@@ -41,6 +41,11 @@ class HomeMenuGrid extends StatelessWidget {
       label: 'Help desk',
       route: 'helpDesk',
     ),
+    _QuickAction(
+      icon: LucideIcons.gamepad2,
+      label: 'Game',
+      route: 'game',
+    ),
   ];
 
   static const _meActions = [

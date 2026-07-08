@@ -32,6 +32,12 @@ import '../../screens/joy_point_history_screen.dart';
 import '../../screens/joy_privilege_detail_screen.dart';
 import '../../screens/joy_privileges_screen.dart';
 import '../../screens/the_joy_screen.dart';
+import '../../screens/game/blend_result_screen.dart';
+import '../../screens/game/game_entry_screen.dart';
+import '../../screens/game/redeem_history_screen.dart';
+import '../../screens/game/ingredient_detail_screen.dart';
+import '../../screens/game/shop_item_detail_screen.dart';
+import '../../screens/game/unlock_catalog_screen.dart';
 import '../../screens/security_screen.dart';
 import '../../screens/settings_screen.dart';
 import '../../services/app_preferences_service.dart';
@@ -372,6 +378,52 @@ final appRouter = GoRouter(
               couponId: state.pathParameters['id']!,
             ),
           ),
+        ),
+        GoRoute(
+          path: 'game',
+          name: 'game',
+          pageBuilder: (context, state) =>
+              _slidePage(state, const GameEntryScreen()),
+          routes: [
+            GoRoute(
+              path: 'catalog',
+              name: 'gameCatalog',
+              pageBuilder: (context, state) =>
+                  _slidePage(state, const UnlockCatalogScreen()),
+            ),
+            GoRoute(
+              path: 'ingredient/:name',
+              name: 'gameIngredient',
+              pageBuilder: (context, state) => _slidePage(
+                state,
+                IngredientDetailScreen(
+                  ingredientName: state.pathParameters['name']!,
+                ),
+              ),
+            ),
+            GoRoute(
+              path: 'shop/:name',
+              name: 'gameShopItem',
+              pageBuilder: (context, state) => _slidePage(
+                state,
+                ShopItemDetailScreen(
+                  ingredientName: state.pathParameters['name']!,
+                ),
+              ),
+            ),
+            GoRoute(
+              path: 'redeem-history',
+              name: 'gameRedeemHistory',
+              pageBuilder: (context, state) =>
+                  _slidePage(state, const RedeemHistoryScreen()),
+            ),
+            GoRoute(
+              path: 'result',
+              name: 'gameResult',
+              pageBuilder: (context, state) =>
+                  _slidePage(state, const BlendResultScreen()),
+            ),
+          ],
         ),
       ],
     ),
